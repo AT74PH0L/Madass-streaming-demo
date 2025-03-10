@@ -190,19 +190,30 @@ export class AuthController {
   }
 
   @Get('/logout')
-  logut(@Req() req: Request, @Res() res: Response) {
+  async logout(@Req() req: Request, @Res() res: Response) {
     const { access_token, refresh_token } = req.cookies;
+
     if (!access_token || !refresh_token) {
-      throw new UnauthorizedException('User Unauthorized');
+      throw new UnauthorizedException('Access or Refresh token missing');
     }
+
     const accessToken: string = access_token as string;
     const refreshToken: string = refresh_token as string;
 
-    const access_claim = this.authService.verifyAccessToken(accessToken);
-    const refresh_claim = this.authService.verifyRefreshToken(refreshToken);
-    if (!access_claim || !refresh_claim) {
-      throw new UnauthorizedException('User Unauthorized');
+    const accessClaim = this.authService.verifyAccessToken(accessToken);
+    const refreshClaim = this.authService.verifyRefreshToken(refreshToken);
+
+    if (!refreshClaim) {
+      throw new UnauthorizedException('Invalid or expired tokens');
     }
+    await this.authService.addBlackList(refreshToken, 30 * 24 * 60 * 60);
+
+    if (!accessClaim) {
+      throw new UnauthorizedException('Invalid or expired tokens');
+    }
+
+    await this.authService.addBlackList(accessToken, 5 * 60);
+
     res.cookie('access_token', '', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -214,8 +225,7 @@ export class AuthController {
       secure: process.env.NODE_ENV === 'production',
       expires: new Date(0),
     });
-
-    return res.status(200).json({ message: 'Logged out successfully' });
+    res.status(200).json({ message: 'Logged out successfully' });
   }
 
   @Get('/refresh')
@@ -230,6 +240,10 @@ export class AuthController {
     const payload = this.authService.verifyRefreshToken(token);
     if (!payload) {
       throw new UnauthorizedException('Invalid or expired refresh token');
+    }
+
+    if (await this.authService.isRefreshTokenBlacklisted(token)) {
+      throw new UnauthorizedException('Token is black list');
     }
 
     const user = await this.authService.findUserByEmail(payload.email);
