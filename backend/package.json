@@ -32,7 +32,9 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "cookie-parser": "^1.4.7",
+    "ioredis": "^5.6.0",
     "mysql2": "^3.13.0",
+    "nestjs-redis": "^1.2.6",
     "parser": "^0.1.4",
     "passport": "^0.7.0",
     "passport-github2": "^0.1.12",
@@ -41,6 +43,7 @@
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "sequelize": "^6.37.6",
+    "sequelize-redis": "^1.0.7",
     "sequelize-typescript": "^2.1.6"
   },
   "devDependencies": {

@@ -3,15 +3,13 @@ import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { GoogleStrategy } from './google.strategy';
 import { GitHubStrategy } from './github.strategy';
+import { AuthController } from './auth.controller';
+import { DatabaseModule } from 'src/database/database.module';
 
 @Module({
-  imports: [
-    JwtModule.register({
-      secret: process.env.JWT_SECRET || 'your-secret-key',
-      signOptions: { expiresIn: '1h' },
-    }),
-  ],
+  imports: [JwtModule.register({}), DatabaseModule],
   providers: [AuthService, GoogleStrategy, GitHubStrategy],
   exports: [AuthService, JwtModule],
+  controllers: [AuthController],
 })
 export class AuthModule {}
