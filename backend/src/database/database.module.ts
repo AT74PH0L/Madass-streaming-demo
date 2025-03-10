@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { User } from 'src/users/entities/user.entity';
 
 @Module({
   imports: [
@@ -15,6 +16,8 @@ import { SequelizeModule } from '@nestjs/sequelize';
         autoLoadModels: true,
       }),
     }),
+    SequelizeModule.forFeature([User]),
   ],
+  exports: [SequelizeModule],
 })
 export class DatabaseModule {}
