@@ -1,16 +1,18 @@
-import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { Inject, Injectable } from '@nestjs/common';
+import { JsonWebTokenError, JwtService, TokenExpiredError } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { User } from 'src/users/entities/user.entity';
 import { Claim } from './dto/claim.dto';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { InjectModel } from '@nestjs/sequelize';
+import Redis from 'ioredis';
 
 @Injectable()
 export class AuthService {
   constructor(
     private jwtService: JwtService,
     @InjectModel(User) private readonly usersRepository: typeof User,
+    @Inject('REDIS_CLIENT') private readonly redisCache: Redis,
   ) {}
 
   async hashPassword(password: string) {
@@ -55,26 +57,38 @@ export class AuthService {
     return token;
   }
 
-  verifyAccessToken(token: string) {
+  async verifyAccessToken(token: string) {
     try {
-      const payload: Claim = this.jwtService.verify(token, {
+      const payload: Claim = await this.jwtService.verify(token, {
         secret: process.env.JWT_SECRET,
       });
       return payload;
-    } catch (error) {
-      console.log(error);
+    } catch (error: unknown) {
+      let err = 'access_token: ';
+      if (error instanceof TokenExpiredError) {
+        err += error.message + ' ';
+      } else if (error instanceof JsonWebTokenError) {
+        err += error.message + ' ';
+      }
+      console.log(err);
       return null;
     }
   }
 
-  verifyRefreshToken(token: string) {
+  async verifyRefreshToken(token: string) {
     try {
-      const payload: Claim = this.jwtService.verify(token, {
+      const payload: Claim = await this.jwtService.verify(token, {
         secret: process.env.REFRESH_JWT_SECRET,
       });
       return payload;
-    } catch (error) {
-      console.log(error);
+    } catch (error: unknown) {
+      let err = 'refresh_token: ';
+      if (error instanceof TokenExpiredError) {
+        err += error.message + ' ';
+      } else if (error instanceof JsonWebTokenError) {
+        err += error.message + ' ';
+      }
+      console.log(err);
       return null;
     }
   }
@@ -93,5 +107,14 @@ export class AuthService {
       picture: createUserDto.picture,
       role: createUserDto.role,
     });
+  }
+
+  async addBlackList(token: string, exp: number) {
+    await this.redisCache.set(`blacklist:${token}`, 'revoked', 'EX', exp);
+  }
+
+  async isRefreshTokenBlacklisted(token: string) {
+    const result = await this.redisCache.get(`blacklist:${token}`);
+    return result !== undefined;
   }
 }
