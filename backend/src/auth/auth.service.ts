@@ -57,9 +57,9 @@ export class AuthService {
     return token;
   }
 
-  verifyAccessToken(token: string) {
+  async verifyAccessToken(token: string) {
     try {
-      const payload: Claim = this.jwtService.verify(token, {
+      const payload: Claim = await this.jwtService.verify(token, {
         secret: process.env.JWT_SECRET,
       });
       return payload;
@@ -75,9 +75,9 @@ export class AuthService {
     }
   }
 
-  verifyRefreshToken(token: string) {
+  async verifyRefreshToken(token: string) {
     try {
-      const payload: Claim = this.jwtService.verify(token, {
+      const payload: Claim = await this.jwtService.verify(token, {
         secret: process.env.REFRESH_JWT_SECRET,
       });
       return payload;

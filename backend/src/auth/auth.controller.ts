@@ -13,7 +13,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { GoogleOAuthGuard } from './google.guard';
+import { GoogleOAuthGuard } from './guard/google.guard';
 import { Request, Response } from 'express';
 import { GoogleProfile } from './dto/google.profile.dto';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
@@ -125,13 +125,13 @@ export class AuthController {
   }
 
   @Get('/authorization')
-  authorization(@Req() req: Request) {
+  async authorization(@Req() req: Request) {
     const { access_token } = req.cookies;
     const token: string = access_token as string;
     if (!access_token) {
       throw new UnauthorizedException('User Unauthorized');
     }
-    const claim = this.authService.verifyAccessToken(token);
+    const claim = await this.authService.verifyAccessToken(token);
     if (!claim) {
       throw new UnauthorizedException('User Unauthorized');
     }
@@ -161,7 +161,7 @@ export class AuthController {
     const userExist = await this.authService.findUserByEmail(loginDto.email);
 
     if (!userExist) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      throw new UnauthorizedException('Email or password is incorrect');
     }
 
     const isMatch = await this.authService.comparePasswords(
@@ -170,7 +170,7 @@ export class AuthController {
     );
 
     if (!isMatch) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Email or password is incorrect');
     }
 
     const access_token = this.authService.generateAccessToken(userExist);
@@ -200,8 +200,9 @@ export class AuthController {
     const accessToken: string = access_token as string;
     const refreshToken: string = refresh_token as string;
 
-    const accessClaim = this.authService.verifyAccessToken(accessToken);
-    const refreshClaim = this.authService.verifyRefreshToken(refreshToken);
+    const accessClaim = await this.authService.verifyAccessToken(accessToken);
+    const refreshClaim =
+      await this.authService.verifyRefreshToken(refreshToken);
 
     if (!refreshClaim) {
       throw new UnauthorizedException('Invalid or expired tokens');
@@ -211,8 +212,6 @@ export class AuthController {
     if (!accessClaim) {
       throw new UnauthorizedException('Invalid or expired tokens');
     }
-
-    await this.authService.addBlackList(accessToken, 5 * 60);
 
     res.cookie('access_token', '', {
       httpOnly: true,
@@ -237,7 +236,7 @@ export class AuthController {
     }
 
     const token: string = refresh_token as string;
-    const payload = this.authService.verifyRefreshToken(token);
+    const payload = await this.authService.verifyRefreshToken(token);
     if (!payload) {
       throw new UnauthorizedException('Invalid or expired refresh token');
     }
