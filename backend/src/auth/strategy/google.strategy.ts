@@ -5,7 +5,7 @@ import {
   StrategyOptions,
   VerifyCallback,
 } from 'passport-google-oauth20';
-import { GoogleProfile } from './dto/google.profile.dto';
+import { GoogleProfile } from '../dto/google.profile.dto';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {

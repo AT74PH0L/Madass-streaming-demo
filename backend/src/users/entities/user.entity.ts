@@ -1,4 +1,5 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import { Role } from 'src/auth/role.enum';
 
 @Table
 export class User extends Model {
@@ -12,7 +13,6 @@ export class User extends Model {
   @Column({
     type: DataType.STRING,
     allowNull: true,
-    unique: true,
   })
   displayName: string;
 
@@ -50,5 +50,5 @@ export class User extends Model {
     type: DataType.STRING,
     allowNull: false,
   })
-  role: string;
+  role: Role;
 }

@@ -1,3 +1,5 @@
+import { Role } from '../role.enum';
+
 export class Claim {
   sub: string;
   displayName: string;
@@ -5,5 +7,5 @@ export class Claim {
   lastName: string;
   email: string;
   picture: string;
-  role: string;
+  role: Role;
 }
