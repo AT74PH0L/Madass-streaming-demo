@@ -20,6 +20,7 @@ import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { GitHubProfile } from './dto/github.profile.dto';
 import { LoginDto } from 'src/auth/dto/login-user.dto';
+import { LoginResponseDto } from './dto/login-response.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -175,6 +176,12 @@ export class AuthController {
 
     const access_token = this.authService.generateAccessToken(userExist);
     const refresh_token = this.authService.generateRefreshToken(userExist);
+    const userResponse: LoginResponseDto = {
+      email: userExist.email,
+      displayName: userExist.displayName,
+      picture: userExist.picture,
+      role: userExist.role,
+    };
     res.cookie('access_token', access_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -186,7 +193,7 @@ export class AuthController {
       secure: process.env.NODE_ENV === 'production',
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
-    return res.status(200).send();
+    return res.status(200).json(userResponse).send();
   }
 
   @Get('/logout')
