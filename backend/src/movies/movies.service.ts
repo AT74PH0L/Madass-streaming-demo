@@ -1,26 +1,43 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
+import { InjectModel } from '@nestjs/sequelize';
+import { Movie } from './entities/movie.entity';
 
 @Injectable()
 export class MoviesService {
-  create(createMovieDto: CreateMovieDto) {
-    return 'This action adds a new movie';
+  constructor(
+    @InjectModel(Movie) private readonly moviesRepository: typeof Movie,
+  ) {}
+  async create(createMovieDto: CreateMovieDto) {
+    return await this.moviesRepository.create({
+      name: createMovieDto.name,
+      description: createMovieDto.description,
+      pathImg: createMovieDto.pathImg,
+      userId: createMovieDto.userId,
+    });
   }
 
-  findAll() {
-    return `This action returns all movies`;
+  async findAll() {
+    return await this.moviesRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} movie`;
+  async findOne(id: string) {
+    return await this.moviesRepository.findOne({ where: { id: id } });
   }
 
-  update(id: number, updateMovieDto: UpdateMovieDto) {
-    return `This action updates a #${id} movie`;
+  async update(id: string, updateMovieDto: UpdateMovieDto) {
+    const movie = await this.moviesRepository.findOne({ where: { id: id } });
+    if (movie) {
+      return movie.update(updateMovieDto);
+    }
+    return null;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} movie`;
+  async remove(id: string) {
+    const movie = await this.moviesRepository.findOne({ where: { id: id } });
+    if (movie) {
+      return movie.destroy();
+    }
   }
 }

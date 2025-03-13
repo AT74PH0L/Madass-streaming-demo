@@ -61,6 +61,12 @@ export class AuthController {
     }
     const access_token = this.authService.generateAccessToken(user);
     const refresh_token = this.authService.generateRefreshToken(user);
+    const userResponse: LoginResponseDto = {
+      email: user.email,
+      displayName: user.displayName,
+      picture: user.picture,
+      role: user.role,
+    };
     res.cookie('access_token', access_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -73,7 +79,7 @@ export class AuthController {
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
 
-    return res.redirect(`${process.env.FRONTEND_CALLBACK_URL}`);
+    return res.status(200).json(userResponse).send();
   }
 
   @Get('/github')
@@ -111,6 +117,12 @@ export class AuthController {
     }
     const access_token = this.authService.generateAccessToken(user);
     const refresh_token = this.authService.generateRefreshToken(user);
+    const userResponse: LoginResponseDto = {
+      email: user.email,
+      displayName: user.displayName,
+      picture: user.picture,
+      role: user.role,
+    };
     res.cookie('access_token', access_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -122,7 +134,7 @@ export class AuthController {
       secure: process.env.NODE_ENV === 'production',
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
-    return res.redirect(`${process.env.FRONTEND_CALLBACK_URL}`);
+    return res.status(200).json(userResponse).send();
   }
 
   @Get('/authorization')

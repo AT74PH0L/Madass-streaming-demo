@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from 'src/users/entities/user.entity';
 import Redis from 'ioredis';
+import { Movie } from 'src/movies/entities/movie.entity';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import Redis from 'ioredis';
         autoLoadModels: true,
       }),
     }),
-    SequelizeModule.forFeature([User]),
+    SequelizeModule.forFeature([User, Movie]),
   ],
   providers: [
     {
@@ -25,7 +26,7 @@ import Redis from 'ioredis';
       useFactory: () => {
         return new Redis({
           host: process.env.REDIS_HOST || '',
-          port: parseInt(process.env.EDIS_PORT || '6379'),
+          port: parseInt(process.env.REDIS_PORT || '6379'),
           password: process.env.REDIS_PASSWORD || undefined,
         });
       },
