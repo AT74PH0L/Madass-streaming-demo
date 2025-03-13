@@ -3,6 +3,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import LoginPage from "@/page/LoginPage";
 import RegisterPage from "@/page/RegisterPage";
 import HomePage from "@/page/HomePage";
+import LoginWithGoogle from "@/page/LoginWithGoogle";
 
 const router = createBrowserRouter([
   {
@@ -14,15 +15,19 @@ const router = createBrowserRouter([
     element: <RegisterPage />,
   },
   {
-    path: "/home",
-    element: (
-      <ProtectedRoute allowedRoles={["user", "admin","creator"]}> 
-        <HomePage />
-      </ProtectedRoute>
-    ),
+    path: "/LoginWithGoogle",
+    element: <LoginWithGoogle />,
+  },
+  {
+    // path: "/home",
+    // element: (
+    //   <ProtectedRoute allowedRoles={["user", "admin", "creator"]}>
+    //     <HomePage />
+    //   </ProtectedRoute>
+    // ),
 
-      // path: "/home",
-      // element: <HomePage />,
+    path: "/home",
+    element: <HomePage />,
   },
 ]);
 

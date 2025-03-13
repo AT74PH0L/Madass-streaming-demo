@@ -3,11 +3,15 @@ import Navbar from "@/components/Navbar";
 import NewMoive from "@/components/NewMoive";
 import { useEffect, useState } from "react";
 import "./HomePage.css";
-// import { authenApi } from "@/api/authen";
+import { authenApi } from "@/api/authen";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { AxiosError } from "axios";
 // import { AxiosError } from "axios";
 // import { useNavigate } from "react-router-dom";
 export default function HomePage() {
   // const [role, setRole] = useState<string>();
+  const navigate = useNavigate();
   const [images, setImages] = useState<string[]>([]);
   useEffect(() => {
     const fetchedImages = [
@@ -21,7 +25,22 @@ export default function HomePage() {
       "https://i.pinimg.com/originals/07/48/88/074888f68348811a30b7cc12ae77ee50.png",
     ];
     setImages(fetchedImages);
-  }, []);
+    const authenticateUser = async () => {
+      try {
+        const response = await authenApi();
+        console.log("aaaa", response);
+        if (response instanceof AxiosError) {
+          navigate("/");
+        }
+        toast.success("Welcome to MADASS");
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+        navigate("/");
+      }
+    };
+
+    authenticateUser();
+  }, [navigate]);
 
   return (
     <>

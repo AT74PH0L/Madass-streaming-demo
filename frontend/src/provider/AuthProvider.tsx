@@ -1,11 +1,8 @@
 import React, { createContext, useState, ReactNode } from "react";
 
 interface User {
-  sub: string;
-  displayName: string;
-  firstName: string;
-  lastName: string;
   email: string;
+  displayName: string;
   picture: string;
   role: string;
 }
