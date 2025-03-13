@@ -1,5 +1,5 @@
 import React from "react";
-import "./car.css";
+import "./card.css";
 
 interface ImgProp {
   img: string; // กำหนด prop img ที่เป็น string

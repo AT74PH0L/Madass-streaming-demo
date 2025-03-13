@@ -6,6 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { registerApi } from "@/api/registerApi";
+import { toast } from "react-toastify";
+import { AxiosError } from "axios";
+import NotificationToast from "./ui/NotificationToast";
 
 export function RegisterForm({
   className,
@@ -32,8 +36,18 @@ export function RegisterForm({
         .oneOf([yup.ref("password")], "Passwords must match")
         .required("Confirm password is required"),
     }),
-    onSubmit: (values) => {
-      console.log("Form Data: ", values);
+    onSubmit: async (values) => {
+      const response = await registerApi(
+        values.fname,
+        values.lname,
+        values.email,
+        values.password
+      );
+      if (response instanceof AxiosError) {
+        toast.error(response.response?.data.message);
+      } else {
+        toast.success("Register success");
+      }
     },
   });
 
@@ -133,6 +147,8 @@ export function RegisterForm({
           </div>
         </CardContent>
       </Card>
+
+      <NotificationToast/>
     </div>
   );
 }

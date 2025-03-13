@@ -1,13 +1,14 @@
 .card-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px; /* ช่องว่างระหว่าง card */
-  margin: auto auto;
+  gap: 16px; 
+  margin-left: auto; /* เพิ่มระยะห่างซ้าย */
+  margin-right: auto; /* เพิ่มระยะห่างขวา */
   padding: 16px;
-  max-width: 12000px; /* จำกัดความกว้างของ card-list */
+  /* max-width: 12000px;  */
 }
 
 .header{
     margin-left: 20px;
-    font-size: 1.5vw;
+    font-size: 30px;
 }

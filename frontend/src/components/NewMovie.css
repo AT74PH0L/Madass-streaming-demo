@@ -1,11 +1,46 @@
-.container {
+.newMovie {
+  /* position: relative; */
+  display: flex;
+  justify-content: space-between;
+  height: 50vh;
+}
+.left,
+.right {
+  flex: 1;
+}
+
+.left {
+  margin: 15px;
+  margin-left: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.button {
   position: relative;
 }
 
-.button {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  margin-bottom: 16px; /* ห่างจากขอบด้านล่าง */
-  margin-right: 16px; /* ห่างจากขอบด้านขวา */
+.img {
+  border-radius: 10px;
+}
+
+.movieName {
+  font-size: 80px;
+}
+
+.title{
+  display: flex;
+  flex-direction: column;
+}
+
+.review{
+  margin-top: 10px;
+}
+
+.btn-play{
+  margin-bottom: 50px;
+}
+
+.imgNew{
+  width: 50vw;
 }

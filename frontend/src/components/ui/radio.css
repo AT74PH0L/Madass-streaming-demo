@@ -1,0 +1,27 @@
+.rating {
+  display: inline-block;
+  direction: rtl; /* This ensures stars are shown from right to left */
+}
+
+.rating input {
+  display: none;
+}
+
+.rating label {
+  cursor: pointer;
+  font-size: 30px;
+  color: #ccc; /* Default color for unselected stars */
+}
+
+.rating label:before {
+  content: '★'; /* Unicode for star */
+  font-size: 30px;
+}
+
+.rating input:checked ~ label {
+  color: var(--primary); /* Color for selected stars */
+}
+
+.rating input:checked + label {
+  color: var(--primary);
+}
