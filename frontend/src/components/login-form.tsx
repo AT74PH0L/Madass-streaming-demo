@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { login } from "../api/login";
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import NotificationToast from "./ui/NotificationToast";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -36,7 +36,7 @@ export default function LoginForm({
       password: yup.string().required("Password is required"),
     }),
     onSubmit: async (values) => {
-      const response = await login(values.email, values.password);
+      const response:AxiosResponse = await login(values.email, values.password);
       // console.log(response)
       if (response instanceof AxiosError) {
         toast.error(response.response?.data.message);
