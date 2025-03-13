@@ -19,6 +19,7 @@ import { Roles } from 'src/auth/roles.decorator';
 import { Role } from 'src/auth/role.enum';
 import { Request } from 'express';
 import { AuthService } from 'src/auth/auth.service';
+import { MovieResponseDto } from './dto/movie-response.dto';
 
 @Controller('movies')
 @UseGuards(AuthGuard, RolesGuard)
@@ -37,8 +38,8 @@ export class MoviesController {
     if (!claim) {
       throw new UnauthorizedException('Invalid or expired access token');
     }
-    createMovieDto.userId = claim.sub;
-    return this.moviesService.create(createMovieDto);
+    const userId = claim.sub;
+    return this.moviesService.create(userId, createMovieDto);
   }
 
   @Get()
@@ -47,8 +48,22 @@ export class MoviesController {
     return this.moviesService.findAll();
   }
 
+  @Get('/creator')
+  @Roles(Role.Admin, Role.Creator)
+  async getMoviesOfCreator(@Req() req: Request) {
+    const { access_token } = req.cookies;
+    const token: string = access_token as string;
+    const claim = await this.authService.verifyAccessToken(token);
+    if (!claim) {
+      throw new UnauthorizedException('Invalid or expired access token');
+    }
+    const movies: MovieResponseDto[] =
+      await this.moviesService.findAllMoviesByUserId(claim.sub);
+    return movies;
+  }
+
   @Get(':id')
-  @Roles((Role.User, Role.Admin, Role.Creator))
+  @Roles(Role.User, Role.Admin, Role.Creator)
   async findOne(@Param('id') id: string) {
     return await this.moviesService.findOne(id);
   }

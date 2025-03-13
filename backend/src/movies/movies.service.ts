@@ -9,12 +9,12 @@ export class MoviesService {
   constructor(
     @InjectModel(Movie) private readonly moviesRepository: typeof Movie,
   ) {}
-  async create(createMovieDto: CreateMovieDto) {
+  async create(userId: string, createMovieDto: CreateMovieDto) {
     return await this.moviesRepository.create({
       name: createMovieDto.name,
       description: createMovieDto.description,
       pathImg: createMovieDto.pathImg,
-      userId: createMovieDto.userId,
+      userId: userId,
     });
   }
 
@@ -39,5 +39,17 @@ export class MoviesService {
     if (movie) {
       return movie.destroy();
     }
+  }
+
+  async findAllMoviesByUserId(id: string) {
+    const movies = await this.moviesRepository.findAll({
+      where: { userId: id },
+    });
+    return movies.map((movie) => ({
+      name: movie.name,
+      pathImg: movie.pathImg,
+      description: movie.description,
+      createAt: movie.createdAt as string,
+    }));
   }
 }

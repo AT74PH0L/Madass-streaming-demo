@@ -10,6 +10,4 @@ export class CreateMovieDto {
   @IsNotEmpty()
   @IsString()
   description: string;
-
-  userId: string;
 }

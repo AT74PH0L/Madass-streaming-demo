@@ -44,8 +44,8 @@ export class RolesGuard implements CanActivate {
       if (!requiredRoles) {
         return true;
       }
-
-      console.log(payload);
+      console.log('Required Roles:', requiredRoles);
+      console.log('User Role:', payload.role);
 
       if (!requiredRoles.includes(payload.role)) {
         throw new ForbiddenException(
