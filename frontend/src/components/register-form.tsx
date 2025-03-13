@@ -1,4 +1,3 @@
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button1";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,6 +14,8 @@ export function RegisterForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const passwordRules =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -29,7 +30,10 @@ export function RegisterForm({
       lname: yup.string().required("Last name is required"),
       password: yup
         .string()
-        .min(8, "Password must be at least 8 characters")
+        .matches(
+          passwordRules,
+          "Password must contain at least 8 characters, including uppercase, lowercase, number, and special character."
+        )
         .required("Password is required"),
       confirmPassword: yup
         .string()
@@ -148,7 +152,7 @@ export function RegisterForm({
         </CardContent>
       </Card>
 
-      <NotificationToast/>
+      <NotificationToast />
     </div>
   );
 }
