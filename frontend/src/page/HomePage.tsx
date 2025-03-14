@@ -24,6 +24,7 @@ export default function HomePage() {
         const response = await axiosInstant.get("/movies");
         console.log(response.data.imgPath);
         setImages(response.data);
+        toast.success("Welcome to MADASS");
       } catch (error) {
         console.error("Error fetching movies:", error);
       }
@@ -34,7 +35,6 @@ export default function HomePage() {
       try {
         const response = await authenApi();
         console.log("Authentication Response:", response);
-        toast.success("Welcome to MADASS");
         if (response instanceof AxiosError) {
           navigate("/");
         }
