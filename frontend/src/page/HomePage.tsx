@@ -6,41 +6,47 @@ import "./HomePage.css";
 import { authenApi } from "@/api/authen";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+// import axios, { AxiosError } from "axios";
+import axiosInstant from "@/utils/axios";
 import { AxiosError } from "axios";
-// import { AxiosError } from "axios";
-// import { useNavigate } from "react-router-dom";
+
 export default function HomePage() {
-  // const [role, setRole] = useState<string>();
   const navigate = useNavigate();
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<
+    { id: string; name: string; pathImg: string; description: string }[]
+  >([]);
+  const API_URL = import.meta.env.VITE_PUBLIC_API_URL;
+
   useEffect(() => {
-    const fetchedImages = [
-      "https://www.thebangkokinsight.com/wp-content/uploads/2019/10/batch_1-88.jpg",
-      "https://i.pinimg.com/originals/07/48/88/074888f68348811a30b7cc12ae77ee50.png",
-      "https://i.pinimg.com/originals/07/48/88/074888f68348811a30b7cc12ae77ee50.png",
-      "https://i.pinimg.com/originals/07/48/88/074888f68348811a30b7cc12ae77ee50.png",
-      "https://i.pinimg.com/originals/07/48/88/074888f68348811a30b7cc12ae77ee50.png",
-      "https://i.pinimg.com/originals/07/48/88/074888f68348811a30b7cc12ae77ee50.png",
-      "https://i.pinimg.com/originals/07/48/88/074888f68348811a30b7cc12ae77ee50.png",
-      "https://i.pinimg.com/originals/07/48/88/074888f68348811a30b7cc12ae77ee50.png",
-    ];
-    setImages(fetchedImages);
+    // ฟังก์ชันดึงข้อมูลหนังทั้งหมด
+    const fetchMovies = async () => {
+      try {
+        const response = await axiosInstant.get("/movies");
+        console.log(response.data.imgPath);
+        setImages(response.data);
+      } catch (error) {
+        console.error("Error fetching movies:", error);
+      }
+    };
+
+    // ฟังก์ชันตรวจสอบการ Authentication
     const authenticateUser = async () => {
       try {
         const response = await authenApi();
-        console.log("aaaa", response);
+        console.log("Authentication Response:", response);
+        toast.success("Welcome to MADASS");
         if (response instanceof AxiosError) {
           navigate("/");
         }
-        toast.success("Welcome to MADASS");
       } catch (error) {
-        console.error("Error parsing user data:", error);
+        console.error("Error during authentication:", error);
         navigate("/");
       }
     };
 
     authenticateUser();
-  }, [navigate]);
+    fetchMovies();
+  }, [navigate, API_URL]); // ไม่มี images ในนี้
 
   return (
     <>
@@ -50,11 +56,15 @@ export default function HomePage() {
       </div>
       <div>
         <div className="header">
-          <h1>All movie</h1>
+          <h1>All Movies</h1>
         </div>
         <div className="card-list">
-          {images.map((img, index) => (
-            <Card key={index} img={img} />
+          {images.map((movie) => (
+            <Card
+              key={movie.id}
+              img={movie.pathImg}
+              id={movie.id}
+            />
           ))}
         </div>
       </div>

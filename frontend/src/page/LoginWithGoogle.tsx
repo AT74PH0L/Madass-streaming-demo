@@ -9,7 +9,7 @@ export default function LoginWithGoogle() {
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
   const [isAuthenticating, setIsAuthenticating] = useState(false); // เก็บสถานะการเรียก API
-
+  
   useEffect(() => {
     const authenticateUser = async () => {
       if (isAuthenticating || authContext?.user) return; // หยุดถ้ากำลังเรียก API หรือผู้ใช้ล็อกอินแล้ว
@@ -30,7 +30,7 @@ export default function LoginWithGoogle() {
           return;
         }
 
-        authContext.login(response); // ส่งค่าผู้ใช้ที่ได้ไปเก็บใน Context
+        // authContext.login(response); // ส่งค่าผู้ใช้ที่ได้ไปเก็บใน Context
         toast.success("Welcome to MADASS");
 
         setTimeout(() => {

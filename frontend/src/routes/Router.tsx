@@ -1,9 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
-import ProtectedRoute from "./ProtectedRoute";
+// import ProtectedRoute from "./ProtectedRoute";
 import LoginPage from "@/page/LoginPage";
 import RegisterPage from "@/page/RegisterPage";
 import HomePage from "@/page/HomePage";
 import LoginWithGoogle from "@/page/LoginWithGoogle";
+import MovieDetail from "@/page/MovieDetial";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
 
     path: "/home",
     element: <HomePage />,
+  },
+  {
+    path: "/movie/:id",
+    element: <MovieDetail />,
   },
 ]);
 
