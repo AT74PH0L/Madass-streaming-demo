@@ -46,6 +46,7 @@ export class MoviesService {
       where: { userId: id },
     });
     return movies.map((movie) => ({
+      id: movie.id,
       name: movie.name,
       pathImg: movie.pathImg,
       description: movie.description,
