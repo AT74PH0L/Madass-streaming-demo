@@ -36,7 +36,10 @@ export default function LoginForm({
       password: yup.string().required("Password is required"),
     }),
     onSubmit: async (values) => {
-      const response:AxiosResponse = await login(values.email, values.password);
+      const response: AxiosResponse = await login(
+        values.email,
+        values.password
+      );
       // console.log(response)
       if (response instanceof AxiosError) {
         toast.error(response.response?.data.message);
@@ -56,6 +59,12 @@ export default function LoginForm({
     },
   });
 
+  const handleGoogleLogin = () => {
+    // Perform Google login logic here
+
+    // Navigate to a new page after login (e.g., "/dashboard")
+    window.location.href = import.meta.env.VITE_PUBLIC_API_URL+'/auth/google';
+  };
   return (
     <>
       <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -122,7 +131,7 @@ export default function LoginForm({
               variant="outline"
               className="w-full"
               type="button" // ปรับ type ให้เป็น button เพื่อไม่ให้ฟอร์มส่ง
-              // onClick={handleGoogleLogin}
+              onClick={handleGoogleLogin}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
