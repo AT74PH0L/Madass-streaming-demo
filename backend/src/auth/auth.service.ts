@@ -115,6 +115,6 @@ export class AuthService {
 
   async isRefreshTokenBlacklisted(token: string) {
     const result = await this.redisCache.get(`blacklist:${token}`);
-    return result !== undefined;
+    return result !== null;
   }
 }
