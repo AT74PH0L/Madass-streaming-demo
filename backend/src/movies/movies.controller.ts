@@ -13,12 +13,12 @@ import {
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
-import { RolesGuard } from 'src/auth/guard/role.guard';
-import { AuthGuard } from 'src/auth/guard/auth.guard';
-import { Roles } from 'src/auth/roles.decorator';
-import { Role } from 'src/auth/role.enum';
+import { RolesGuard } from '../auth/guard/role.guard';
+import { AuthGuard } from '../auth/guard/auth.guard';
+import { Roles } from '../auth/roles.decorator';
+import { Role } from '../auth/role.enum';
 import { Request } from 'express';
-import { AuthService } from 'src/auth/auth.service';
+import { AuthService } from '../auth/auth.service';
 import { MovieResponseDto } from './dto/movie-response.dto';
 
 @Controller('movies')

@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 import Redis from 'ioredis';
-import { Movie } from 'src/movies/entities/movie.entity';
+import { Movie } from '../movies/entities/movie.entity';
 
 @Module({
   imports: [

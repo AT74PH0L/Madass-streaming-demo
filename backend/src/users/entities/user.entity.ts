@@ -1,5 +1,5 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
-import { Role } from 'src/auth/role.enum';
+import { Role } from '../../auth/role.enum';
 
 @Table
 export class User extends Model {

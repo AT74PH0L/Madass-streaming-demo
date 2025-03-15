@@ -16,10 +16,10 @@ import { AuthService } from './auth.service';
 import { GoogleOAuthGuard } from './guard/google.guard';
 import { Request, Response } from 'express';
 import { GoogleProfile } from './dto/google.profile.dto';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { CreateUserDto } from '../users/dto/create-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { GitHubProfile } from './dto/github.profile.dto';
-import { LoginDto } from 'src/auth/dto/login-user.dto';
+import { LoginDto } from '../auth/dto/login-user.dto';
 import { LoginResponseDto } from './dto/login-response.dto';
 
 @Controller('auth')
