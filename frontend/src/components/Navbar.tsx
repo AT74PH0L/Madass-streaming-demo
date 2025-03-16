@@ -1,18 +1,7 @@
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import Avatar from "./Avatar/Avatar";
 import "./Navbar.css";
-import { useState } from "react";
-
-export default function Navbar() {
-  const [isDropdownOpen, setDropdownOpen] = useState(false);
-
-  const toggleDropdown = () => {
-    setDropdownOpen(!isDropdownOpen);
-  };
-  const handleLogout = () => {
-    // Your logout logic goes here (e.g., clearing tokens or redirecting)
-    console.log("Logging out...");
-  };
-
+// import { useState } from "react";
+const Navbar = () => {
   return (
     <nav className="flex items-center justify-between p-1 shadow-md bg-black">
       {/* Logo */}
@@ -31,28 +20,10 @@ export default function Navbar() {
         </div>
 
         {/* Avatar */}
-        <div className="mr-5 cursor-pointer" onClick={toggleDropdown}>
-          <Avatar>
-            <AvatarImage src="" />
-            <AvatarFallback>AT</AvatarFallback>
-          </Avatar>
-        </div>
-        {/* Dropdown menu */}
-        {isDropdownOpen && (
-          <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg border border-gray-200">
-            <ul>
-              <li>
-                <button
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 w-full text-left"
-                  onClick={handleLogout}
-                >
-                  Logout
-                </button>
-              </li>
-            </ul>
-          </div>
-        )}
+        <Avatar />
       </div>
     </nav>
   );
-}
+};
+
+export default Navbar;

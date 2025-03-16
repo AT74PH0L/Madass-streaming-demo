@@ -1,4 +1,4 @@
-import Button from "./ui/button";
+import Button from "./ui/button2";
 import "./NewMovie.css";
 import Radio from "./ui/radio";
 function NewMoive() {

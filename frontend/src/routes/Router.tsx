@@ -1,43 +1,47 @@
 import { createBrowserRouter } from "react-router-dom";
-// import ProtectedRoute from "./ProtectedRoute";
 import LoginPage from "@/page/LoginPage";
 import RegisterPage from "@/page/RegisterPage";
 import HomePage from "@/page/HomePage";
 import LoginWithGoogle from "@/page/LoginWithGoogle";
 import MovieDetail from "@/page/MovieDetial";
-import StudioPage from "@/page/creator/StudioPage";
+import CreatorPage from "@/page/CreatorPage";
+import Layout from "./Layout";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <LoginPage />,
+    children: [
+      {
+        path: "/",
+        element: <LoginPage />,
+      },
+      {
+        path: "/LoginWithGoogle",
+        element: <LoginWithGoogle />,
+      },
+      {
+        path: "/register",
+        element: <RegisterPage />,
+      },
+    ],
   },
   {
-    path: "/register",
-    element: <RegisterPage />,
-  },
-  {
-    path: "/LoginWithGoogle",
-    element: <LoginWithGoogle />,
-  },
-  {
-    // path: "/home",
-    // element: (
-    //   <ProtectedRoute allowedRoles={["user", "admin", "creator"]}>
-    //     <HomePage />
-    //   </ProtectedRoute>
-    // ),
-
-    path: "/home",
-    element: <HomePage />,
-  },
-  {
-    path: "/movie/:id",
-    element: <MovieDetail />,
-  },
-  {
-    path: "/studio",
-    element: <StudioPage />,
+    path: "/",
+    element: <Layout />,
+    children: [
+      {
+        path: "/home",
+        element: <HomePage />,
+      },
+      {
+        path: "/movie/:id",
+        element: <MovieDetail />,
+      },
+      {
+        path: "/studio",
+        element: <CreatorPage />,
+      },
+    ],
   },
 ]);
 

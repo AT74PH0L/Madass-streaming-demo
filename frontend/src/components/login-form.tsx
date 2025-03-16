@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button1";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -130,7 +130,7 @@ export default function LoginForm({
             <Button
               variant="outline"
               className="w-full"
-              type="button" // ปรับ type ให้เป็น button เพื่อไม่ให้ฟอร์มส่ง
+              type="button" 
               onClick={handleGoogleLogin}
             >
               <svg

@@ -6,7 +6,7 @@ import "./globals.css";
 import router from "./routes/Router"; // ไฟล์ router
 import { AuthProvider } from "./provider/AuthProvider";
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <AuthProvider>
       <RouterProvider router={router} />

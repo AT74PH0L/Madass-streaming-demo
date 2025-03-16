@@ -2,7 +2,7 @@
   /* position: relative; */
   display: flex;
   justify-content: space-between;
-  height: 50vh;
+  min-height: 500px;
 }
 .left,
 .right {

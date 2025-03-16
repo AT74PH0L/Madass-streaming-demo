@@ -1,5 +1,4 @@
 import Card from "../components/Card";
-import Navbar from "@/components/Navbar";
 import NewMoive from "@/components/NewMoive";
 import { useEffect, useState } from "react";
 import "./HomePage.css";
@@ -11,19 +10,22 @@ import axiosInstant from "@/utils/axios";
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const [images, setImages] = useState<{
-    id: string;
-    name: string;
-    pathImg: string;
-    description: string;
-  }[]>([]);
+  const [allMovie, setAllMovie] = useState<
+    {
+      id: string;
+      name: string;
+      pathImg: string;
+      description: string;
+    }[]
+  >([]);
   // const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null); // เพิ่ม state สำหรับตรวจสอบการ login
 
   // ฟังก์ชันดึงข้อมูลหนังทั้งหมด
   const fetchMovies = async () => {
     try {
       const response = await axiosInstant.get("/movies");
-      setImages(response.data);
+      console.log("Load img")
+      setAllMovie(response.data);
       toast.success("Welcome to MADASS");
     } catch (error) {
       navigate("/");
@@ -51,22 +53,21 @@ export default function HomePage() {
     //   authenticateUser();
     // } else if (isAuthenticated) {
     //   // หากผู้ใช้ล็อกอินแล้ว, ดึงข้อมูลหนัง
-      fetchMovies();
+    fetchMovies();
     // }
   }, [navigate]); // เพิ่ม isAuthenticated เป็น dependency ของ useEffect
 
   return (
     <>
-      <Navbar />
       <div>
         <NewMoive />
       </div>
       <div>
-        <div className="header">
+        <div className="header ml-10">
           <h1>All Movies</h1>
         </div>
-        <div className="card-list">
-          {images.map((movie) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-5 gap-8 max-w-6xl mx-auto mt-10">
+          {allMovie.map((movie) => (
             <Card key={movie.id} img={movie.pathImg} id={movie.id} />
           ))}
         </div>

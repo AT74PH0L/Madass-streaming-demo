@@ -16,7 +16,7 @@ const axiosInstance: AxiosInstance = axios.create({
 const refreshToken = async (): Promise<void> => {
   try {
     console.log("AAA");
-    console.log(await axios.get("https://localhost:3000/auth/refresh", { withCredentials: true }));
+    console.log(await axios.get(`${API_URL}/auth/refresh`, { withCredentials: true }));
     
   } catch (error) {
     console.error("Refresh Token Failed:", error);
