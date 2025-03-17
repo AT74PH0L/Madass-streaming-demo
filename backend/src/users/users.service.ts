@@ -22,17 +22,47 @@ export class UsersService {
   }
 
   async findAll() {
-    return await this.usersRepository.findAll();
+    const users = await this.usersRepository.findAll();
+    return users.map((user) => ({
+      id: user.id,
+      displayName: user.displayName,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      picture: user.picture,
+      role: user.role,
+    }));
   }
 
   async findOne(id: string) {
-    return await this.usersRepository.findOne({ where: { id: id } });
+    const user = await this.usersRepository.findOne({ where: { id: id } });
+    if (user) {
+      return {
+        id: user.id,
+        displayName: user.displayName,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        picture: user.picture,
+        role: user.role,
+      };
+    }
+    return null;
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
     const user = await this.usersRepository.findOne({ where: { id: id } });
     if (user) {
-      return user.update(updateUserDto);
+      const updateUser = await user.update(updateUserDto);
+      return {
+        id: updateUser.id,
+        displayName: updateUser.displayName,
+        firstName: updateUser.firstName,
+        lastName: updateUser.lastName,
+        email: updateUser.email,
+        picture: updateUser.picture,
+        role: updateUser.role,
+      };
     }
     return null;
   }
@@ -40,7 +70,7 @@ export class UsersService {
   async remove(id: string) {
     const user = await this.usersRepository.findOne({ where: { id: id } });
     if (user) {
-      return user.destroy();
+      await user.destroy();
     }
   }
 

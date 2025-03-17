@@ -1,6 +1,5 @@
 import {
   IsEmail,
-  IsEmpty,
   IsNotEmpty,
   IsString,
   Length,
@@ -32,9 +31,6 @@ export class CreateUserDto {
   password: string;
 
   role: string;
-
-  @IsEmpty()
   displayName: string;
-  @IsEmpty()
   picture: string;
 }

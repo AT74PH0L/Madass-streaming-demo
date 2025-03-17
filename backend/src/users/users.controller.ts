@@ -6,6 +6,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  NotFoundException,
 } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
@@ -27,19 +28,31 @@ export class UsersController {
 
   @Get(':id')
   @Roles(Role.Admin)
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
+    const user = await this.usersService.findOne(id);
+    if (!user) {
+      throw new NotFoundException('User not found.');
+    }
     return this.usersService.findOne(id);
   }
 
   @Patch(':id')
   @Roles(Role.Admin)
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    const user = await this.usersService.findOne(id);
+    if (!user) {
+      throw new NotFoundException('User not found.');
+    }
     return this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')
   @Roles(Role.Admin)
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
+    const user = await this.usersService.findOne(id);
+    if (!user) {
+      throw new NotFoundException('User not found.');
+    }
     return this.usersService.remove(id);
   }
 }
