@@ -6,6 +6,7 @@ import LoginWithGoogle from "@/page/LoginWithGoogle";
 import MovieDetail from "@/page/MovieDetial";
 import CreatorPage from "@/page/CreatorPage";
 import Layout from "./Layout";
+import AdminPage from "@/page/AdminPage";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: "/studio",
         element: <CreatorPage />,
+      },
+      {
+        path: "/admin",
+        element: <AdminPage />,
       },
     ],
   },
