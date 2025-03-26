@@ -1,0 +1,78 @@
+version: '3.8'
+services:
+  reverse-proxy:
+    build: .
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - external-net
+      - internal-net
+
+  frontend:
+    platform: linux/amd64
+    build: ./frontend
+    container_name: sample-frontend
+    env_file:
+      - ./frontend/.env    
+    networks:
+      - external-net
+    depends_on:
+      - backend
+
+  backend:
+    platform: linux/amd64
+    build: ./backend
+    container_name: sample-backend
+    env_file:
+      - ./backend/.env
+    networks:
+      - internal-net
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  redis:
+    image: redis:latest
+    container_name: my-redis
+    restart: always
+    volumes:
+      - redis_data:/data
+    networks:
+      - internal-net
+    command: ["redis-server", "--appendonly", "yes"]
+
+  mysql:
+    image: mysql:latest
+    container_name: my-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE_NAME}
+      MYSQL_USER: ${DATABASE_USERNAME}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - internal-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  redis_data:
+    driver: local
+  mysql_data:
+    driver: local
+
+networks:
+  internal-net:
+    driver: bridge
+  external-net:
+    driver: bridge
