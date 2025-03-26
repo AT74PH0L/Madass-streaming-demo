@@ -1,5 +1,7 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
 import { Role } from '../../auth/role.enum';
+import { Review } from 'src/reviews/entities/review.entity';
+import { Movie } from 'src/movies/entities/movie.entity';
 
 @Table
 export class User extends Model {
@@ -51,4 +53,10 @@ export class User extends Model {
     allowNull: false,
   })
   role: Role;
+
+  @HasMany(() => Review)
+  reviews: Review[];
+
+  @HasMany(() => Movie)
+  movies: Movie[];
 }

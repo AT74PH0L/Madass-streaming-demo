@@ -5,8 +5,10 @@ import {
   Table,
   ForeignKey,
   BelongsTo,
+  HasMany,
 } from 'sequelize-typescript';
 import { User } from '../../users/entities/user.entity';
+import { Review } from 'src/reviews/entities/review.entity';
 
 @Table
 export class Movie extends Model {
@@ -44,4 +46,7 @@ export class Movie extends Model {
 
   @BelongsTo(() => User)
   user: User;
+
+  @HasMany(() => Review)
+  reviews: Review[];
 }

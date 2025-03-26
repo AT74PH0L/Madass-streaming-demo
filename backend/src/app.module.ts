@@ -7,6 +7,7 @@ import { AuthService } from './auth/auth.service';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { MoviesModule } from './movies/movies.module';
+import { ReviewsModule } from './reviews/reviews.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { MoviesModule } from './movies/movies.module';
     DatabaseModule,
     AuthModule,
     MoviesModule,
+    ReviewsModule,
   ],
   controllers: [AppController],
   providers: [AppService, AuthService],

@@ -3,6 +3,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from '../users/entities/user.entity';
 import Redis from 'ioredis';
 import { Movie } from '../movies/entities/movie.entity';
+import { Review } from '../reviews/entities/review.entity';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { Movie } from '../movies/entities/movie.entity';
         autoLoadModels: true,
       }),
     }),
-    SequelizeModule.forFeature([User, Movie]),
+    SequelizeModule.forFeature([User, Movie, Review]),
   ],
   providers: [
     {
