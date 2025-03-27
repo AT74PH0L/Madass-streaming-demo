@@ -3,6 +3,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './entities/user.entity';
+import { Review } from 'src/reviews/entities/review.entity';
+import { Movie } from 'src/movies/entities/movie.entity';
 
 @Injectable()
 export class UsersService {
@@ -68,7 +70,10 @@ export class UsersService {
   }
 
   async remove(id: string) {
-    const user = await this.usersRepository.findOne({ where: { id: id } });
+    const user = await this.usersRepository.findOne({
+      where: { id: id },
+      include: [Review, Movie],
+    });
     if (user) {
       await user.destroy();
     }
