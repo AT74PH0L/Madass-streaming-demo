@@ -54,9 +54,9 @@ export class User extends Model {
   })
   role: Role;
 
-  @HasMany(() => Review)
-  reviews: Review[];
+  @HasMany(() => Review, { onDelete: 'CASCADE', hooks: true })
+  reviews!: Review[];
 
-  @HasMany(() => Movie)
-  movies: Movie[];
+  @HasMany(() => Movie, { onDelete: 'CASCADE', hooks: true })
+  movies!: Movie[];
 }

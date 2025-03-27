@@ -44,9 +44,9 @@ export class Movie extends Model {
   })
   userId: string;
 
-  @BelongsTo(() => User)
+  @BelongsTo(() => User, { onDelete: 'CASCADE' })
   user: User;
 
-  @HasMany(() => Review)
-  reviews: Review[];
+  @HasMany(() => Review, { onDelete: 'CASCADE', hooks: true })
+  reviews!: Review[];
 }

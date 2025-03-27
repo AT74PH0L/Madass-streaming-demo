@@ -30,7 +30,7 @@ export class Review extends Model {
   })
   userId: string;
 
-  @BelongsTo(() => User)
+  @BelongsTo(() => User, { onDelete: 'CASCADE' })
   user: User;
 
   @ForeignKey(() => Movie)
@@ -40,6 +40,6 @@ export class Review extends Model {
   })
   movieId: string;
 
-  @BelongsTo(() => Movie)
+  @BelongsTo(() => Movie, { onDelete: 'CASCADE' })
   movie: Movie;
 }
