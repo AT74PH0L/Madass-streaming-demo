@@ -9,6 +9,7 @@ import {
 } from 'sequelize-typescript';
 import { User } from '../../users/entities/user.entity';
 import { Review } from 'src/reviews/entities/review.entity';
+import { History } from './history.entity';
 
 @Table
 export class Movie extends Model {
@@ -49,4 +50,7 @@ export class Movie extends Model {
 
   @HasMany(() => Review, { onDelete: 'CASCADE', hooks: true })
   reviews!: Review[];
+
+  @HasMany(() => History, { onDelete: 'CASCADE', hooks: true })
+  histories!: History[];
 }

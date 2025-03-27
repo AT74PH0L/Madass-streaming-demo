@@ -2,6 +2,7 @@ import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
 import { Role } from '../../auth/role.enum';
 import { Review } from 'src/reviews/entities/review.entity';
 import { Movie } from 'src/movies/entities/movie.entity';
+import { History } from 'src/movies/entities/history.entity';
 
 @Table
 export class User extends Model {
@@ -59,4 +60,7 @@ export class User extends Model {
 
   @HasMany(() => Movie, { onDelete: 'CASCADE', hooks: true })
   movies!: Movie[];
+
+  @HasMany(() => History, { onDelete: 'CASCADE', hooks: true })
+  histories!: History[];
 }
