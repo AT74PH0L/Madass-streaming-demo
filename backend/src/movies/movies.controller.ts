@@ -9,6 +9,7 @@ import {
   UseGuards,
   Req,
   UnauthorizedException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
@@ -64,7 +65,18 @@ export class MoviesController {
 
   @Get(':id')
   @Roles(Role.User, Role.Admin, Role.Creator)
-  async findOne(@Param('id') id: string) {
+  async findOne(@Req() req: Request, @Param('id') id: string) {
+    const { access_token } = req.cookies;
+    const token: string = access_token as string;
+    const claim = await this.authService.verifyAccessToken(token);
+    if (!claim) {
+      throw new UnauthorizedException('Invalid or expired access token');
+    }
+    const userId = claim.sub;
+    const history = await this.moviesService.addWatchMovieHistory(userId, id);
+    if (!history) {
+      throw new InternalServerErrorException('Add history failed');
+    }
     return await this.moviesService.findOne(id);
   }
 

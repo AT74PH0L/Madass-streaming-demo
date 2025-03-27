@@ -3,11 +3,15 @@ import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Movie } from './entities/movie.entity';
+import { History } from './entities/history.entity';
+import { Sequelize } from 'sequelize-typescript';
+import { Review } from 'src/reviews/entities/review.entity';
 
 @Injectable()
 export class MoviesService {
   constructor(
     @InjectModel(Movie) private readonly moviesRepository: typeof Movie,
+    @InjectModel(History) private readonly historyRepository: typeof History,
   ) {}
   async create(userId: string, createMovieDto: CreateMovieDto) {
     return await this.moviesRepository.create({
@@ -19,7 +23,7 @@ export class MoviesService {
   }
 
   async findAll() {
-    return await this.moviesRepository.findAll();
+    return await this.moviesRepository.findAll({ order: [['name', 'ASC']] });
   }
 
   async findOne(id: string) {
@@ -35,7 +39,10 @@ export class MoviesService {
   }
 
   async remove(id: string) {
-    const movie = await this.moviesRepository.findOne({ where: { id: id } });
+    const movie = await this.moviesRepository.findOne({
+      where: { id: id },
+      include: [Review, History],
+    });
     if (movie) {
       return movie.destroy();
     }
@@ -44,6 +51,7 @@ export class MoviesService {
   async findAllMoviesByUserId(id: string) {
     const movies = await this.moviesRepository.findAll({
       where: { userId: id },
+      order: [['name', 'ASC']],
     });
     return movies.map((movie) => ({
       id: movie.id,
@@ -52,5 +60,13 @@ export class MoviesService {
       description: movie.description,
       createAt: movie.createdAt as string,
     }));
+  }
+
+  async addWatchMovieHistory(userId: string, movieId: string) {
+    return await this.historyRepository.create({
+      timestamp: Sequelize.literal('CURRENT_TIME'),
+      userId: userId,
+      movieId: movieId,
+    });
   }
 }
