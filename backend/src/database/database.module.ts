@@ -4,6 +4,7 @@ import { User } from '../users/entities/user.entity';
 import Redis from 'ioredis';
 import { Movie } from '../movies/entities/movie.entity';
 import { Review } from '../reviews/entities/review.entity';
+import { History } from '../movies/entities/history.entity';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { Review } from '../reviews/entities/review.entity';
         autoLoadModels: true,
       }),
     }),
-    SequelizeModule.forFeature([User, Movie, Review]),
+    SequelizeModule.forFeature([User, Movie, Review, History]),
   ],
   providers: [
     {
