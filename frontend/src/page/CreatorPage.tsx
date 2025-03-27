@@ -12,7 +12,7 @@ export default function CreatorPage() {
       try {
         const response = await authenApi();
         console.log(response.role);
-        if (response.role !== "creator" && response.role != "admin") {
+        if (response.role !== "creator") {
           navigate("/home"); 
         } else {
           setLoading(false); 

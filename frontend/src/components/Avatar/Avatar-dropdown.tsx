@@ -64,11 +64,11 @@ export default function UserAvatar({
         {role === "admin" && (
           <DropdownMenuItem onClick={onAdminClick} className="cursor-pointer">
             <Settings className="mr-2 h-4 w-4" />
-            <span>Admin Dashboard</span>
+            <span>Admin</span>
           </DropdownMenuItem>
         )}
 
-        {(role === "creator" || role === "admin") && (
+        {(role === "creator") && (
           <DropdownMenuItem onClick={onStudioClick} className="cursor-pointer">
             <Palette className="mr-2 h-4 w-4" />
             <span>Studio</span>

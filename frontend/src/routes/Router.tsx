@@ -8,6 +8,8 @@ import CreatorPage from "@/page/CreatorPage";
 import Layout from "./Layout";
 import AdminPage from "@/page/AdminPage";
 import ReviewPage from "@/page/ReviewPage";
+import AdminDashboardPage from "@/page/AdminDashboardPage";
+import AdminMoviesPage from "@/page/AdminMoviesPage";
 
 const router = createBrowserRouter([
   {
@@ -50,6 +52,14 @@ const router = createBrowserRouter([
       {
         path: "/review/:id",
         element: <ReviewPage />,
+      },
+      {
+        path: "/admin/dashboard",
+        element: <AdminDashboardPage />,
+      },
+      {
+        path: "/admin/movies",
+        element: <AdminMoviesPage />,
       },
     ],
   },
