@@ -1,4 +1,4 @@
-export interface Dashboard {
+export interface DashboardAdmin {
   total: {
     totalUser: number;
     totalMovie: number;
