@@ -3,9 +3,10 @@ import { InjectModel } from '@nestjs/sequelize';
 import { User } from '../users/entities/user.entity';
 import { Movie } from 'src/movies/entities/movie.entity';
 import { History } from 'src/movies/entities/history.entity';
-import { Sequelize } from 'sequelize';
+import { col, fn, Op, Sequelize } from 'sequelize';
 import { Most } from './dto/most.dto';
 import { Review } from 'src/reviews/entities/review.entity';
+import { Period } from './dto/period.dto';
 
 @Injectable()
 export class DashboardService {
@@ -51,7 +52,6 @@ export class DashboardService {
       order: [[Sequelize.literal('count'), 'DESC']],
       limit: 5,
     });
-    console.log(histories);
     return histories.map((item) => ({
       id: item.movieId,
       name: item.movie.name,
@@ -95,6 +95,89 @@ export class DashboardService {
       id: reviews[0].movieId,
       name: reviews[0].movie.name,
       times: (reviews[0].dataValues as Most).count.toString(),
+    };
+  }
+
+  async countTotalByMovieUserId(userId: string) {
+    const totalViews = await this.historyRepository.count({
+      include: {
+        model: Movie,
+        where: { userId: userId },
+      },
+    });
+    const totalReviews = await this.reviewRepository.count({
+      include: {
+        model: Movie,
+        where: { userId: userId },
+      },
+    });
+
+    return {
+      totalViews,
+      totalReviews,
+    };
+  }
+
+  async getMostViewMoviesByMovieUserId(userId: string) {
+    const histories = await this.historyRepository.findAll({
+      attributes: [
+        'movieId',
+        [Sequelize.fn('COUNT', Sequelize.col('*')), 'count'],
+      ],
+      include: {
+        model: Movie,
+        where: { userId: userId },
+      },
+      group: ['movieId'],
+      order: [[Sequelize.literal('count'), 'DESC']],
+      limit: 5,
+    });
+
+    return histories.map((item) => ({
+      id: item.movieId,
+      name: item.movie.name,
+      pathImg: item.movie.pathImg,
+      times: (item.dataValues as Most).count.toString(),
+    }));
+  }
+
+  async getViewWithTimeSeries(userId: string) {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const total = await this.historyRepository.count({
+      where: {
+        timestamp: { [Op.gte]: thirtyDaysAgo },
+      },
+      include: {
+        model: Movie,
+        where: { userId: userId },
+      },
+    });
+
+    const histories = await this.historyRepository.findAll({
+      attributes: [
+        [fn('DATE', col('timestamp')), 'date'],
+        [fn('COUNT', col('*')), 'count'],
+      ],
+      where: {
+        timestamp: { [Op.gte]: thirtyDaysAgo },
+      },
+      include: {
+        model: Movie,
+        where: { userId: userId },
+        attributes: [],
+      },
+      group: [fn('DATE', col('timestamp'))],
+      order: [[fn('DATE', col('timestamp')), 'ASC']],
+    });
+
+    return {
+      totalViewsPeriod: total,
+      data: histories.map((item) => ({
+        date: (item.dataValues as Period).date,
+        views: (((item.dataValues as Period).count / total) * 100).toFixed(2),
+      })),
     };
   }
 }
