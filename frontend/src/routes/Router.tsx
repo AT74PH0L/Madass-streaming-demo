@@ -10,6 +10,7 @@ import AdminPage from "@/page/AdminPage";
 import ReviewPage from "@/page/ReviewPage";
 import AdminDashboardPage from "@/page/AdminDashboardPage";
 import AdminMoviesPage from "@/page/AdminMoviesPage";
+import CreatorDashboardage from "@/page/CreatorDashboardPage";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
       {
         path: "/studio",
         element: <CreatorPage />,
+      },
+      {
+        path: "/studio/dashboard",
+        element: <CreatorDashboardage />,
       },
       {
         path: "/admin",

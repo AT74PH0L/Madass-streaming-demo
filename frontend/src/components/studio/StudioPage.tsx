@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Plus } from "lucide-react";
+import { LayoutDashboard, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MovieCard } from "./MovieCard";
 import { EditMovieDialog } from "./EditMovieDialog";
@@ -7,6 +7,7 @@ import { DeleteMovieDialog } from "./DeleteMovieDialog";
 import type { Movie } from "./type/movie";
 import axiosInstance from "@/utils/axios";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function StudioPage() {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -14,6 +15,7 @@ export default function StudioPage() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [isCreating, setIsCreating] = useState(false);
+  const navigate = useNavigate()
 
   const handleEdit = (movie: Movie) => {
     setSelectedMovie(movie);
@@ -82,9 +84,14 @@ export default function StudioPage() {
     <div className="">
       <div className="flex justify-between items-center mb-8 ml-10 mr-10">
         <h1 className="text-3xl font-bold">Movie Studio</h1>
-        <Button onClick={handleCreate}>
-          <Plus className="mr-2 h-4 w-4" /> Add Movie
-        </Button>
+        <div className="flex gap-4">
+          <Button onClick={handleCreate}>
+            <Plus className="mr-2 h-4 w-4" /> Add Movie
+          </Button>
+          <Button onClick={() => navigate("/studio/dashboard")}>
+            <LayoutDashboard className="mr-2 h-4 w-4" /> Dashboard
+          </Button>
+        </div>
       </div>
       <div className="flex items-center justify-center text-3xl font-bold text-orange-300">
         {movies.length === 0 ? <div>No movies available</div> : null}
