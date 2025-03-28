@@ -1,11 +1,13 @@
+import { useNavigate } from "react-router-dom";
 import Avatar from "./Avatar/Avatar";
 import "./Navbar.css";
 // import { useState } from "react";
 const Navbar = () => {
+  const navigate = useNavigate();
   return (
     <nav className="flex items-center justify-between p-1 shadow-md bg-black">
       {/* Logo */}
-      <div className="logo">
+      <div className="logo cursor-pointer" onClick={() => navigate("/home")}>
         {/* <img
           src="https://fontmeme.com/temporary/313d6110675a2f778d3eb84ed09d5e4c.png"
           alt=""
