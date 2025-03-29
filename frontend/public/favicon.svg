@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Black background -->
+  <rect width="32" height="32" fill="#000000"/>
+  
+  <!-- Stylized "M" in pixelated style -->
+  <g fill="#FF8C00"> <!-- Using a slightly darker orange for better visibility -->
+    <!-- Left vertical line of M -->
+    <rect x="4" y="8" width="4" height="16"/>
+    
+    <!-- Middle diagonal parts of M -->
+    <rect x="8" y="8" width="4" height="4"/>
+    <rect x="12" y="12" width="4" height="4"/>
+    <rect x="16" y="12" width="4" height="4"/>
+    <rect x="20" y="8" width="4" height="4"/>
+    
+    <!-- Right vertical line of M -->
+    <rect x="24" y="8" width="4" height="16"/>
+    
+    <!-- Small play button triangle in the center -->
+    <polygon points="12,18 20,18 16,23" fill="#FF8C00"/>
+  </g>
+</svg>

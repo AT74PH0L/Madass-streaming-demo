@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { User, Movie, UserRes } from "./type";
+import type { Movie, User, UserRes } from "./type";
 import { UserFilters } from "./UserFilters";
 import { UserList } from "./UserList";
 import { CreatorPostsModal } from "./CreatorPostsModal";
@@ -19,7 +19,7 @@ export default function AdminPageDetial({ adminEmail }: adminProp) {
   // const [searchQuery, setSearchQuery] = useState("")
   const [selectedRole, setSelectedRole] = useState<string>("all");
   const [selectedCreator, setSelectedCreator] = useState<User | null>(null);
-  const [creatorPosts, setCreatorPosts] = useState<Movie[]>([]);
+  const [creatorPosts] = useState<Movie[]>([]);
   const [isPostsModalOpen, setIsPostsModalOpen] = useState(false);
 
   // Filter users based on search query and selected role
