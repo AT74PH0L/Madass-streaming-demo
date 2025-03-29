@@ -132,11 +132,11 @@ export class AuthController {
     const { access_token } = req.cookies;
     const token: string = access_token as string;
     if (!access_token) {
-      throw new UnauthorizedException('User Unauthorized');
+      throw new UnauthorizedException('Access token is missing');
     }
     const claim = await this.authService.verifyAccessToken(token);
     if (!claim) {
-      throw new UnauthorizedException('User Unauthorized');
+      throw new UnauthorizedException('Invalid or expired tokens');
     }
 
     const userResponse: LoginResponseDto = {

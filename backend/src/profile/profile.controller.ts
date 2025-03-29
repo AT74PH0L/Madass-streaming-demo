@@ -9,10 +9,10 @@ import {
 import { ProfileService } from './profile.service';
 import { AuthGuard } from '../auth/guard/auth.guard';
 import { RolesGuard } from '../auth/guard/role.guard';
-import { Roles } from 'src/auth/roles.decorator';
-import { Role } from 'src/auth/role.enum';
+import { Roles } from '../auth/roles.decorator';
+import { Role } from '../auth/role.enum';
 import { Request } from 'express';
-import { AuthService } from 'src/auth/auth.service';
+import { AuthService } from '../auth/auth.service';
 
 @Controller('profile')
 @UseGuards(AuthGuard, RolesGuard)

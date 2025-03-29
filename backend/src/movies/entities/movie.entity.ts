@@ -8,7 +8,7 @@ import {
   HasMany,
 } from 'sequelize-typescript';
 import { User } from '../../users/entities/user.entity';
-import { Review } from 'src/reviews/entities/review.entity';
+import { Review } from '../../reviews/entities/review.entity';
 import { History } from './history.entity';
 
 @Table

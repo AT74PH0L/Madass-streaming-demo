@@ -3,8 +3,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './entities/user.entity';
-import { Review } from 'src/reviews/entities/review.entity';
-import { Movie } from 'src/movies/entities/movie.entity';
+import { Review } from '../reviews/entities/review.entity';
+import { Movie } from '../movies/entities/movie.entity';
 
 @Injectable()
 export class UsersService {

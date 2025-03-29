@@ -1,8 +1,8 @@
 import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
 import { Role } from '../../auth/role.enum';
-import { Review } from 'src/reviews/entities/review.entity';
-import { Movie } from 'src/movies/entities/movie.entity';
-import { History } from 'src/movies/entities/history.entity';
+import { Review } from '../../reviews/entities/review.entity';
+import { Movie } from '../../movies/entities/movie.entity';
+import { History } from '../../movies/entities/history.entity';
 
 @Table
 export class User extends Model {

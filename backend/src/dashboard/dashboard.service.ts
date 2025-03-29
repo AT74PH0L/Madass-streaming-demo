@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from '../users/entities/user.entity';
-import { Movie } from 'src/movies/entities/movie.entity';
-import { History } from 'src/movies/entities/history.entity';
+import { Movie } from '../movies/entities/movie.entity';
+import { History } from '../movies/entities/history.entity';
 import { col, fn, Op, Sequelize } from 'sequelize';
 import { Most } from './dto/most.dto';
-import { Review } from 'src/reviews/entities/review.entity';
+import { Review } from '../reviews/entities/review.entity';
 import { Period } from './dto/period.dto';
 
 @Injectable()

@@ -5,7 +5,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Movie } from './entities/movie.entity';
 import { History } from './entities/history.entity';
 import { Sequelize } from 'sequelize-typescript';
-import { Review } from 'src/reviews/entities/review.entity';
+import { Review } from '../reviews/entities/review.entity';
 
 @Injectable()
 export class MoviesService {

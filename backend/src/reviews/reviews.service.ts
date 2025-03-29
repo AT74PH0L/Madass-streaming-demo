@@ -4,8 +4,8 @@ import { UpdateReviewDto } from './dto/update-review.dto';
 import { Review } from './entities/review.entity';
 import { InjectModel } from '@nestjs/sequelize';
 import { ReviewResponse } from './dto/review-response.dto';
-import { Movie } from 'src/movies/entities/movie.entity';
-import { User } from 'src/users/entities/user.entity';
+import { Movie } from '../movies/entities/movie.entity';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class ReviewsService {
