@@ -43,7 +43,7 @@ export class DashboardController {
   }
 
   @Get('creator')
-  @Roles(Role.Creator)
+  @Roles(Role.Creator, Role.Admin)
   async getDashboardCreator(@Req() req: Request) {
     const { access_token } = req.cookies;
     const token: string = access_token as string;

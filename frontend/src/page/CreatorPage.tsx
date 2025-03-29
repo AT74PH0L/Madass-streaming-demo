@@ -12,14 +12,14 @@ export default function CreatorPage() {
       try {
         const response = await authenApi();
         console.log(response.role);
-        if (response.role !== "creator") {
-          navigate("/home"); 
+        if (response.role !== "creator" && response.role !== "admin") {
+          navigate("/home");
         } else {
-          setLoading(false); 
+          setLoading(false);
         }
       } catch (error) {
         console.error("Error fetching authentication:", error);
-        navigate("/home"); 
+        navigate("/home");
       }
     };
 

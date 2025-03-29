@@ -68,7 +68,7 @@ export default function UserAvatar({
           </DropdownMenuItem>
         )}
 
-        {(role === "creator") && (
+        {(role === "creator" || role == "admin") && (
           <DropdownMenuItem onClick={onStudioClick} className="cursor-pointer">
             <Palette className="mr-2 h-4 w-4" />
             <span>Studio</span>

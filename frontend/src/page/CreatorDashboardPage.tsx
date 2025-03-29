@@ -29,7 +29,7 @@ export default function CreatorDashboardPage() {
     const fetchData = async () => {
       try {
         const response = await authenApi();
-        if (response.role != "creator") {
+        if (response.role != "creator" && response.role != "admin") {
           navigate("/home");
         }
       } catch (error) {
@@ -62,7 +62,13 @@ export default function CreatorDashboardPage() {
   return (
     <>
       <div className="flex justify-between items-center mb-8 ml-10 mr-10">
-        <h1 className="text-3xl font-bold cursor-pointer" onClick={() => navigate('/studio')}> Dashboard Studio</h1>
+        <h1
+          className="text-3xl font-bold cursor-pointer"
+          onClick={() => navigate("/studio")}
+        >
+          {" "}
+          Dashboard Studio
+        </h1>
       </div>
       <div className="w-2/3 mx-auto grid gap-2">
         <div className="space-y-6">
