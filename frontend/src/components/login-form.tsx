@@ -51,10 +51,10 @@ export default function LoginForm({
         //   return;
         // }
         // authContext.login(response);
+        toast.success("login success");
         setTimeout(() => {
           navigate("/home");
         }, 2000);
-        toast.success("login success");
       }
     },
   });
@@ -63,7 +63,7 @@ export default function LoginForm({
     // Perform Google login logic here
 
     // Navigate to a new page after login (e.g., "/dashboard")
-    window.location.href = import.meta.env.VITE_PUBLIC_API_URL+'/auth/google';
+    window.location.href = import.meta.env.VITE_PUBLIC_API_URL + "/auth/google";
   };
   return (
     <>
@@ -130,7 +130,7 @@ export default function LoginForm({
             <Button
               variant="outline"
               className="w-full"
-              type="button" 
+              type="button"
               onClick={handleGoogleLogin}
             >
               <svg

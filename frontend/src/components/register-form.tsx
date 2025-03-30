@@ -9,11 +9,13 @@ import { registerApi } from "@/api/registerApi";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import NotificationToast from "./ui/NotificationToast";
+import { useNavigate } from "react-router-dom";
 
 export function RegisterForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const navigate = useNavigate();
   const passwordRules =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   const formik = useFormik({
@@ -51,6 +53,9 @@ export function RegisterForm({
         toast.error(response.response?.data.message);
       } else {
         toast.success("Register success");
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
       }
     },
   });
