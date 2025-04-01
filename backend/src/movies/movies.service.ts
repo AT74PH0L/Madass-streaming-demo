@@ -51,7 +51,7 @@ export class MoviesService {
   async findAllMoviesByUserId(id: string) {
     const movies = await this.moviesRepository.findAll({
       where: { userId: id },
-      order: [['name', 'ASC']],
+      order: [['createdAt', 'DESC']],
     });
     return movies.map((movie) => ({
       id: movie.id,
@@ -68,5 +68,57 @@ export class MoviesService {
       userId: userId,
       movieId: movieId,
     });
+  }
+
+  async findAllWithPage(page: string) {
+    const pageSize = 5; // Number of movies per page
+    const pageNumber = Math.max(parseInt(page, 10) || 1, 1); // Ensure page is at least 1
+    const offset = (pageNumber - 1) * pageSize;
+
+    // Fetch movies with pagination
+    const { count, rows: movies } = await this.moviesRepository.findAndCountAll(
+      {
+        limit: pageSize,
+        offset: offset,
+        order: [['createdAt', 'DESC']],
+      },
+    );
+
+    const totalPages = Math.ceil(count / pageSize);
+    const hasMore = pageNumber < totalPages;
+
+    return {
+      totalMovies: count,
+      totalPages: totalPages,
+      currentPage: pageNumber,
+      hasMore: hasMore,
+      movies: movies,
+    };
+  }
+
+  async findAllMoviesByUserIdWithPage(userId: string, page: string) {
+    const pageSize = 5;
+    const pageNumber = Math.max(parseInt(page, 10) || 1, 1);
+    const offset = (pageNumber - 1) * pageSize;
+
+    const { count, rows: movies } = await this.moviesRepository.findAndCountAll(
+      {
+        where: { userId: userId },
+        limit: pageSize,
+        offset: offset,
+        order: [['createdAt', 'DESC']],
+      },
+    );
+
+    const totalPages = Math.ceil(count / pageSize);
+    const hasMore = pageNumber < totalPages;
+
+    return {
+      totalMovies: count,
+      totalPages: totalPages,
+      currentPage: pageNumber,
+      hasMore: hasMore,
+      movies: movies,
+    };
   }
 }

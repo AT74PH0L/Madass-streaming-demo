@@ -10,6 +10,7 @@ import {
   Req,
   UnauthorizedException,
   InternalServerErrorException,
+  Query,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
@@ -45,18 +46,29 @@ export class MoviesController {
 
   @Get()
   @Roles(Role.User, Role.Admin, Role.Creator)
-  findAll() {
-    return this.moviesService.findAll();
+  async findAll(@Query('page') page: string) {
+    if (page) {
+      const moviesPage = await this.moviesService.findAllWithPage(page);
+      return moviesPage;
+    }
+    return await this.moviesService.findAll();
   }
 
   @Get('/creator')
   @Roles(Role.Admin, Role.Creator)
-  async getMoviesOfCreator(@Req() req: Request) {
+  async getMoviesOfCreator(@Req() req: Request, @Query('page') page: string) {
     const { access_token } = req.cookies;
     const token: string = access_token as string;
     const claim = await this.authService.verifyAccessToken(token);
     if (!claim) {
       throw new UnauthorizedException('Invalid or expired access token');
+    }
+    if (page) {
+      const movies = await this.moviesService.findAllMoviesByUserIdWithPage(
+        claim.sub,
+        page,
+      );
+      return movies;
     }
     const movies: MovieResponseDto[] =
       await this.moviesService.findAllMoviesByUserId(claim.sub);
