@@ -14,6 +14,7 @@ import { AuthService } from '../auth/auth.service';
 import { DashboardAdmin } from './dto/dashboard-admin.dto';
 import { DashboardCreator } from './dto/dashboard-creator.dto';
 import { Request } from 'express';
+import { DashboardProfile } from './dto/dashboard-profile.dto';
 
 @Controller('dashboard')
 @UseGuards(AuthGuard, RolesGuard)
@@ -62,6 +63,30 @@ export class DashboardController {
       total: total,
       mostViewMovies: mostViewMovies,
       viewWithTimeSeries: viewWithTimeSeries,
+    };
+    return dashboard;
+  }
+
+  @Get('profile')
+  @Roles(Role.User, Role.Creator, Role.Admin)
+  async getDashboardProfile(@Req() req: Request) {
+    const { access_token } = req.cookies;
+    const token: string = access_token as string;
+    const claim = await this.authService.verifyAccessToken(token);
+    if (!claim) {
+      throw new UnauthorizedException('Invalid or expired access token');
+    }
+    const userId = claim.sub;
+    const total = await this.dashboardService.countTotalByUserId(userId);
+    const mostWatchedMovie =
+      await this.dashboardService.getMostViewMoviesByUserId(userId);
+    const watchHistory =
+      await this.dashboardService.getWatchHistoryByUserId(userId);
+
+    const dashboard: DashboardProfile = {
+      total: total,
+      mostWatchedMovie: mostWatchedMovie,
+      watchHistory: watchHistory,
     };
     return dashboard;
   }

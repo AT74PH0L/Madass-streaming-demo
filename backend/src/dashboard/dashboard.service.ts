@@ -7,6 +7,7 @@ import { col, fn, Op, Sequelize } from 'sequelize';
 import { Most } from './dto/most.dto';
 import { Review } from '../reviews/entities/review.entity';
 import { Period } from './dto/period.dto';
+import { TimeStamp } from './dto/timestamp.dto';
 
 @Injectable()
 export class DashboardService {
@@ -179,5 +180,61 @@ export class DashboardService {
         views: (((item.dataValues as Period).count / total) * 100).toFixed(2),
       })),
     };
+  }
+
+  async countTotalByUserId(userId: string) {
+    const viewTimes = await this.historyRepository.count({
+      where: { userId: userId },
+    });
+
+    const moviesWatched = await this.historyRepository.count({
+      where: { userId: userId },
+      distinct: true,
+      col: 'movieId',
+    });
+    return {
+      viewTimes: viewTimes,
+      moviesWatched: moviesWatched,
+    };
+  }
+
+  async getMostViewMoviesByUserId(userId: string) {
+    const histories = await this.historyRepository.findAll({
+      where: { userId: userId },
+      attributes: [
+        'movieId',
+        [Sequelize.fn('COUNT', Sequelize.col('*')), 'count'],
+      ],
+      include: [{ model: Movie, attributes: ['name'] }],
+      group: ['movieId'],
+      order: [[Sequelize.literal('count'), 'DESC']],
+      limit: 1,
+    });
+    return {
+      id: histories[0].movieId,
+      name: histories[0].movie.name,
+      times: (histories[0].dataValues as Most).count.toString(),
+    };
+  }
+
+  async getWatchHistoryByUserId(userId: string) {
+    const histories = await this.historyRepository.findAll({
+      where: { userId: userId },
+      attributes: [
+        'movieId',
+        [Sequelize.fn('MAX', Sequelize.col('timestamp')), 'timestamp'],
+      ],
+      include: [Movie],
+      group: ['movieId'],
+      order: [[Sequelize.fn('MAX', Sequelize.col('timestamp')), 'DESC']],
+      limit: 5,
+    });
+
+    return histories.map((history) => ({
+      id: history.movie.id,
+      name: history.movie.name,
+      pathImg: history.movie.pathImg,
+      timestamp: (history as TimeStamp).timestamp,
+    }));
   }
 }
