@@ -3,7 +3,6 @@ import NewMoive from "@/components/NewMoive";
 import { useEffect, useState, useRef, useCallback } from "react";
 import "./HomePage.css";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import axiosInstant from "@/utils/axios";
 
 export default function HomePage() {
@@ -28,7 +27,6 @@ export default function HomePage() {
       console.log("Loading more movies...");
       setAllMovie((prev) => [...prev, ...response.data.movies]);
       setHasMore(response.data.hasMore);
-      toast.success("More movies loaded!");
     } catch (error) {
       console.error("Error fetching movies:", error);
       setHasMore(false);
