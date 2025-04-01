@@ -11,6 +11,7 @@ import ReviewPage from "@/page/ReviewPage";
 import AdminDashboardPage from "@/page/AdminDashboardPage";
 import AdminMoviesPage from "@/page/AdminMoviesPage";
 import CreatorDashboardage from "@/page/CreatorDashboardPage";
+import Profile from "@/page/ProfilePage";
 
 const router = createBrowserRouter([
   {
@@ -65,6 +66,10 @@ const router = createBrowserRouter([
       {
         path: "/admin/movies",
         element: <AdminMoviesPage />,
+      },
+      {
+        path: "/profile",
+        element: <Profile />,
       },
     ],
   },
