@@ -1,4 +1,4 @@
-import { HomeIcon, LogOut, Palette, Settings } from "lucide-react";
+import { HomeIcon, LogOut, Palette, Settings, User } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -8,6 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useNavigate } from "react-router-dom";
 
 type UserRole = "user" | "creator" | "admin";
 
@@ -33,6 +34,7 @@ export default function UserAvatar({
   onAdminClick,
 }: UserAvatarProps) {
   // Get initials from name
+  const navigate = useNavigate();
   const initials = name
     .split(" ")
     .map((n) => n[0])
@@ -59,6 +61,13 @@ export default function UserAvatar({
         <DropdownMenuItem onClick={onHome} className="cursor-pointer">
           <HomeIcon className="mr-2 h-4 w-4" />
           <span>Home</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => navigate("/profile")}
+          className="cursor-pointer"
+        >
+          <User className="mr-2 h-4 w-4" />
+          <span>Profile</span>
         </DropdownMenuItem>
         {/* Show different options based on role */}
         {role === "admin" && (
