@@ -75,6 +75,14 @@ export class MoviesController {
     return movies;
   }
 
+  @Get('/search')
+  search(@Query('query') query: string) {
+    if (query) {
+      return this.moviesService.searchByQuery(query);
+    }
+    return this.moviesService.findAll();
+  }
+
   @Get(':id')
   @Roles(Role.User, Role.Admin, Role.Creator)
   async findOne(@Req() req: Request, @Param('id') id: string) {

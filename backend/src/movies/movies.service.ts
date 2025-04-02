@@ -6,6 +6,7 @@ import { Movie } from './entities/movie.entity';
 import { History } from './entities/history.entity';
 import { Sequelize } from 'sequelize-typescript';
 import { Review } from '../reviews/entities/review.entity';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class MoviesService {
@@ -120,5 +121,24 @@ export class MoviesService {
       hasMore: hasMore,
       movies: movies,
     };
+  }
+
+  async searchByQuery(query: string) {
+    const movies = await this.moviesRepository.findAll({
+      where: {
+        [Op.or]: [
+          { name: { [Op.like]: `%${query}%` } },
+          { description: { [Op.like]: `%${query}%` } },
+        ],
+      },
+    });
+
+    return movies.map((movie) => ({
+      id: movie.id,
+      name: movie.name,
+      pathImg: movie.pathImg,
+      description: movie.description,
+      createAt: movie.createdAt as string,
+    }));
   }
 }
