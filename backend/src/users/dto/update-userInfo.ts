@@ -1,8 +1,9 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString, Matches } from 'class-validator';
 
 export class UpdateUserInfo {
   @IsString()
   @IsOptional()
+  @Matches(/\S/, { message: 'username must not be empty or whitespace' })
   displayName: string;
 
   @IsString()
