@@ -82,7 +82,7 @@ export default function Profile() {
       setNewPicture(sanitizedPicture);
       console.log(newPicture);
       const response = await axiosInstance.patch("/users", {
-        picture: newPicture,
+        picture: sanitizedPicture,
       });
       if (response instanceof AxiosError) {
         toast.error(response.data.message[0]);
