@@ -64,7 +64,7 @@ export class DashboardService {
   }
 
   async getMostWatchedUser() {
-    const histories = await this.historyRepository.findAll({
+    const histories = await this.historyRepository.findOne({
       attributes: [
         'userId',
         [Sequelize.fn('COUNT', Sequelize.col('*')), 'count'],
@@ -72,12 +72,18 @@ export class DashboardService {
       include: [{ model: User, attributes: ['displayName'] }],
       group: ['userId'],
       order: [[Sequelize.literal('count'), 'DESC']],
-      limit: 1,
     });
+    if (!histories) {
+      return {
+        id: '',
+        name: 'No most watchded user.',
+        times: '',
+      };
+    }
     return {
-      id: histories[0].userId,
-      name: histories[0].user.displayName,
-      times: (histories[0].dataValues as Most).count.toString(),
+      id: histories.userId,
+      name: histories.user.displayName,
+      times: (histories.dataValues as Most).count.toString(),
     };
   }
 
@@ -199,7 +205,7 @@ export class DashboardService {
   }
 
   async getMostViewMoviesByUserId(userId: string) {
-    const histories = await this.historyRepository.findAll({
+    const histories = await this.historyRepository.findOne({
       where: { userId: userId },
       attributes: [
         'movieId',
@@ -208,12 +214,20 @@ export class DashboardService {
       include: [{ model: Movie, attributes: ['name'] }],
       group: ['movieId'],
       order: [[Sequelize.literal('count'), 'DESC']],
-      limit: 1,
     });
+
+    if (!histories) {
+      return {
+        id: '',
+        name: 'No most viewed movie.',
+        times: '',
+      };
+    }
+
     return {
-      id: histories[0].movieId,
-      name: histories[0].movie.name,
-      times: (histories[0].dataValues as Most).count.toString(),
+      id: histories.movieId,
+      name: histories.movie.name,
+      times: (histories.dataValues as Most).count.toString(),
     };
   }
 

@@ -18,7 +18,7 @@ import { Roles } from '../auth/roles.decorator';
 import { Role } from '../auth/role.enum';
 import { UpdateUserInfo } from './dto/update-userInfo';
 import { Request } from 'express';
-import { AuthService } from 'src/auth/auth.service';
+import { AuthService } from '../auth/auth.service';
 @Controller('users')
 @UseGuards(AuthGuard, RolesGuard)
 export class UsersController {
