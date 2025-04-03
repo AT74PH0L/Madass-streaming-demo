@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpException,
   HttpStatus,
+  InternalServerErrorException,
   Post,
   Req,
   Res,
@@ -160,6 +161,9 @@ export class AuthController {
     const hashPassword = await this.authService.hashPassword(
       createUserDto.password,
     );
+    if (!hashPassword) {
+      throw new InternalServerErrorException('Hash password is fail');
+    }
     createUserDto.password = hashPassword;
     createUserDto.displayName = `${createUserDto.firstName} ${createUserDto.lastName}`;
     return this.authService.create(createUserDto);

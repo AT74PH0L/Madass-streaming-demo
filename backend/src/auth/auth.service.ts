@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { JsonWebTokenError, JwtService, TokenExpiredError } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { User } from '../users/entities/user.entity';
 import { Claim } from './dto/claim.dto';
 import { CreateUserDto } from '../users/dto/create-user.dto';
@@ -16,11 +16,19 @@ export class AuthService {
   ) {}
 
   async hashPassword(password: string) {
-    return await bcrypt.hash(password, 10);
+    const hash = await bcrypt.hash(password, 10);
+    if (!hash) {
+      return null;
+    }
+    return hash;
   }
 
   async comparePasswords(password: string, hashed: string) {
-    return await bcrypt.compare(password, hashed);
+    const isMatch = await bcrypt.compare(password, hashed);
+    if (!isMatch) {
+      return null;
+    }
+    return isMatch;
   }
 
   generateAccessToken(user: User) {
