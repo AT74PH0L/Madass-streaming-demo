@@ -20,8 +20,10 @@ import NotificationToast from "@/components/ui/NotificationToast";
 import { toast } from "react-toastify";
 import DOMPurify from "dompurify"; // Import DOMPurify
 import { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
+  const navigate = useNavigate();
   const [user, setUser] = useState<UserProfile>({
     id: "",
     displayName: "",
@@ -58,6 +60,7 @@ export default function Profile() {
       const response = await axiosInstance.patch("/users", {
         displayName: sanitizedDisplayName,
       });
+      console.log(response.data);
       if (response.data) {
         setUser((prevUser) => ({
           ...prevUser,
@@ -116,6 +119,7 @@ export default function Profile() {
         }
       } catch (error) {
         console.error("Error fetching authentication:", error);
+        navigate("/");
       }
     };
     const fetchDashboard = async () => {
@@ -127,12 +131,13 @@ export default function Profile() {
         }
       } catch (error) {
         console.error("Error fetching authentication:", error);
+        navigate("/");
       }
     };
 
     fetchDashboard();
     fetchProfile();
-  }, []);
+  }, [navigate]);
 
   return (
     <>

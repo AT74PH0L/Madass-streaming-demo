@@ -9,6 +9,8 @@ import {
   Req,
   NotFoundException,
   UnauthorizedException,
+  InternalServerErrorException,
+  Res,
 } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
@@ -17,7 +19,7 @@ import { RolesGuard } from '../auth/guard/role.guard';
 import { Roles } from '../auth/roles.decorator';
 import { Role } from '../auth/role.enum';
 import { UpdateUserInfo } from './dto/update-userInfo';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { AuthService } from '../auth/auth.service';
 @Controller('users')
 @UseGuards(AuthGuard, RolesGuard)
@@ -56,6 +58,7 @@ export class UsersController {
   @Patch()
   async updateUserInfo(
     @Req() req: Request,
+    @Res() res: Response,
     @Body() updateUserDto: UpdateUserInfo,
   ) {
     const { access_token } = req.cookies;
@@ -69,7 +72,17 @@ export class UsersController {
     if (!user) {
       throw new NotFoundException('User not found.');
     }
-    return this.usersService.update(userId, updateUserDto);
+    const updatedUser = await this.usersService.update(userId, updateUserDto);
+    if (!updatedUser) {
+      throw new InternalServerErrorException('Update user failed');
+    }
+    const accessToken = this.authService.generateAccessToken(updatedUser);
+    res.cookie('access_token', accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 5 * 60 * 1000,
+    });
+    return res.send(updatedUser);
   }
 
   @Delete(':id')

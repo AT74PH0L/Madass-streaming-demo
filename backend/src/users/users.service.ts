@@ -56,15 +56,7 @@ export class UsersService {
     const user = await this.usersRepository.findOne({ where: { id: id } });
     if (user) {
       const updateUser = await user.update(updateUserDto);
-      return {
-        id: updateUser.id,
-        displayName: updateUser.displayName,
-        firstName: updateUser.firstName,
-        lastName: updateUser.lastName,
-        email: updateUser.email,
-        picture: updateUser.picture,
-        role: updateUser.role,
-      };
+      return updateUser;
     }
     return null;
   }
